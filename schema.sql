@@ -1,3 +1,4 @@
+DROP TRIGGER IF EXISTS check_rgs_atendimento ON atendimento;
 DROP TABLE IF EXISTS interna;
 DROP TABLE IF EXISTS visita;
 DROP TABLE IF EXISTS atendimento;
@@ -99,3 +100,21 @@ CREATE TABLE interna(
     FOREIGN KEY (rg_paciente) REFERENCES paciente(rg),
     FOREIGN KEY (numero_quarto) REFERENCES quarto(numero)
 );
+
+CREATE OR REPLACE FUNCTION trigger_atendimento() RETURNS TRIGGER AS $trigger_atendimento$
+Begin
+	-- Se o rg do médico for igual ao rg do paciente, lança exceção
+	IF NEW.RG_Medico = NEW.RG_Paciente THEN
+		RAISE EXCEPTION 'O médico não pode atender a si mesmo';
+	END IF;
+
+    RETURN NEW;
+END;
+$trigger_atendimento$
+LANGUAGE plpgsql
+
+-- Antes de inserir, lança trigger trigger_Atendimento para todas as linhas de Atendimento
+CREATE TRIGGER check_rgs_atendimento
+    BEFORE INSERT OR UPDATE ON atendimento
+	FOR EACH ROW
+        EXECUTE PROCEDURE trigger_atendimento();
