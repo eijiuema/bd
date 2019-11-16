@@ -81,7 +81,7 @@ CREATE TABLE visita(
     rg_enfermeiro varchar,
     data date,
     hora_entrada time,
-    hora_saida time NOT NULL,
+    hora_saida time,
     numero_quarto smallint,
 
     PRIMARY KEY (rg_enfermeiro, data, hora_entrada, numero_quarto),
