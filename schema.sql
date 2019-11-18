@@ -111,7 +111,7 @@ Begin
     RETURN NEW;
 END;
 $trigger_atendimento$
-LANGUAGE plpgsql
+LANGUAGE plpgsql;
 
 -- Antes de inserir, lança trigger trigger_Atendimento para todas as linhas de Atendimento
 CREATE TRIGGER check_rgs_atendimento
